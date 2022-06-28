@@ -1,1 +1,3 @@
-# bake-sale
+# React Native
+
+## Bakesale app
