@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import ajax from './ajax';
+import DealDetail from './components/DealDetail';
 import DealList from './components/DealList';
 
 const App = () => {
   const [deals, setDeals] = useState([]);
+  const [currentDealId, setCurrentDealId] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -14,13 +16,29 @@ const App = () => {
     fetchData();
   }, []);
 
+  const getCurrentDeal = () => {
+    return deals.find(deal => deal.key === currentDealId);
+  };
+
+  const setCurrentDeal = id => {
+    setCurrentDealId(id);
+  };
+
+  if (currentDealId) {
+    return <DealDetail deal={getCurrentDeal()} />;
+  }
+
+  if (deals.length) {
+    return (
+      <View style={styles.container}>
+        <DealList deals={deals} onItemPress={setCurrentDeal} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {deals.length ? (
-        <DealList deals={deals} />
-      ) : (
-        <Text style={styles.header}>Bakesale...</Text>
-      )}
+      <Text style={styles.header}>Bakesale...</Text>
     </View>
   );
 };
